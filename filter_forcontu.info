@@ -1,0 +1,5 @@
+name = "Filter Forcontu"
+description = "Creates a filter foo"
+core = 7.x
+files[] = filter_forcontu.module
+package = My modules

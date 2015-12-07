@@ -1,0 +1,68 @@
+<?php
+/**
+* @file
+* Módulo Filter Forcontu
+* Este módulo creará el filtro foo
+*/
+
+/**
+ * Implements hook_filter_info().
+ */
+function filter_forcontu_filter_info() {
+  $filters['filter_foo'] = array(
+    'title' => t('Foo filter'),
+    'description' => t('Todas las apariciones de "foo" se sustituirán por la cadena indicada en la configuración.'),
+    'process callback' => '_filter_forcontu_filter_foo_process',
+    'settings callback' => '_filter_forcontu_filter_foo_settings',
+    'default settings' => array(
+      'filter_forcontu_foo' => 'bar',
+    ),
+    'tips callback' => '_filter_forcontu_filter_foo_tips',
+  );
+  return $filters;
+}
+
+/**
+ * Genera el formulario con las opciones de configuración del filtro.
+ *
+ */
+
+function _filter_forcontu_filter_foo_settings($form, $form_state, $filter, $format, $defaults) {
+  $settings['filter_forcontu_foo'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Cadena de sustitución'),
+    '#default_value' => isset($filter->settings['filter_forcontu_foo']) ? 
+                              $filter->settings['filter_forcontu_foo'] :
+                              $defaults['filter_forcontu_foo'],
+    '#description' => t('Cadena que sustiuirá a todas las apariciones de "foo"'),
+  );
+  return $settings;
+}
+
+/**
+ * Implementa el filtro
+ *
+ */
+function _filter_forcontu_filter_foo_process($text, $filter, $format) {
+  $replacement = isset($filter->settings['filter_forcontu_foo']) ?
+                        $filter->settings['filter_forcontu_foo'] :
+                        'bar';
+  return str_replace('foo', $replacement, $text);
+}
+
+/**
+ * Devuelve ayuda relacionada con el uso del filtro
+ *
+ */
+function _filter_forcontu_filter_foo_tips($filter, $format, $long = FALSE) {
+  $replacement = isset($filter->settings['filter_forcontu_foo']) ?
+                        $filter->settings['filter_forcontu_foo'] :
+                        'bar';
+  if (!$long) {
+    return t('<em>foo</em> será reemplazado por %replacement', array('%replacement' => $replacement));
+  } 
+  else {
+    return t('Todas las apariciones de "foo" se sustituirán por la cadena indicada en la configuración
+     del filtro. El valor actual es "%replacement"', array('%replacement' => $replacement));
+  }
+}
